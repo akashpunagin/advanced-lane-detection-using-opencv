@@ -2,6 +2,7 @@ import cv2
 
 # VISUALIZING
 is_demo = True
+is_show_histogram_plot = True
 
 # CAMERA AND VIDEO SETUP
 is_camera_feed = False

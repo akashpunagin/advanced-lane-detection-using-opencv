@@ -75,11 +75,22 @@ while cap.isOpened():
     # Display text on frame
     frame_with_text = utility.display_text(frame_with_lines, radius_of_curv, offset)
 
+    try:
+        # Read the plotted histogram
+        histogram_plot = cv2.imread('assets/plots/histogram_plot.jpg')
+        # Combine with frame_with_lanes
+        frame_with_histogram = cv2.addWeighted(frame, 0.7, histogram_plot, 0.4, 0)
+    except Exception as e:
+        print('Exception in reading histogram plot...')
+
     # Visualizing
     if const.is_demo:
         cv2.imshow('Source points', frame_src_points)
         cv2.imshow('Steering Wheel', rotated_steering_wheel)
         cv2.imshow('Lanes', frame_with_text)
+
+        if const.is_show_histogram_plot:
+            cv2.imshow('Histogram Plot', frame_with_histogram)
     else:
         cv2.imshow('Original Frame', frame)
         cv2.imshow('Canny Filter', frame_canny)
@@ -89,6 +100,9 @@ while cap.isOpened():
         cv2.imshow('Source points', frame_src_points)
         cv2.imshow('Steering Wheel', rotated_steering_wheel)
         cv2.imshow('Lanes', frame_with_text)
+
+        if const.is_show_histogram_plot:
+            cv2.imshow('Histogram Plot', frame_with_histogram)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

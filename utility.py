@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import cv2
 import pickle
 import define_constants as const
@@ -114,6 +115,9 @@ def display_sliding_window(frame, n_windows=const.n_windows, margin=const.margin
     # Calculate histogram of lower half of frame
     histogram = np.sum( frame [frame.shape[0]//2 : ,:], axis=0)
 
+    # Save histogram to display
+    save_histogram(histogram)
+
     # Find peaks in histogram, in left and right halves
     midpoint = int(histogram.shape[0] / 2)
     left_peak = np.argmax(histogram[:midpoint])
@@ -173,6 +177,16 @@ def display_sliding_window(frame, n_windows=const.n_windows, margin=const.margin
     frame_output[nonzero_y[right_lane_indices], nonzero_x[right_lane_indices]] = const.pixel_color_in_window_right # right lane
 
     return frame_output, nonzero_x, nonzero_y, left_lane_indices, right_lane_indices
+
+def save_histogram(histogram):
+    plt.plot(histogram)
+    plt.tight_layout()
+    plt.xticks([])
+    plt.yticks([])
+    plt.savefig('assets/plots/histogram_plot.jpg')
+    plt.clf()
+    plt.cla()
+    plt.close()
 
 def get_left_right_curve(nonzero_x, nonzero_y, left_lane_indices, right_lane_indices):
 
