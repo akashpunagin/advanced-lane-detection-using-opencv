@@ -78,7 +78,7 @@ while cap.isOpened():
     try:
         # Read the plotted histogram
         histogram_plot = cv2.imread('assets/plots/histogram_plot.jpg')
-        # Combine with frame_with_lanes
+        # Combine with frame
         frame_with_histogram = cv2.addWeighted(frame, 0.7, histogram_plot, 0.4, 0)
     except Exception as e:
         print('Exception in reading histogram plot...')
