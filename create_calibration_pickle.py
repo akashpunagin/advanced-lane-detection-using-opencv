@@ -2,10 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import cv2
-import glob #  glob module is used to retrieve files/pathnames matching a specified pattern
+import glob # glob module is used to retrieve files/pathnames matching a specified pattern
 import pickle
 import define_constants as const
-# plt.tight_layout()
 
 # Read all Distorted images
 images = glob.glob(const.calibration_images_path)
@@ -84,12 +83,13 @@ print('Image shape : ', img_shape)
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(
                             objectPoints=chess_points,
                             imagePoints=corners,
-                            imageSize=(img_shape[1], img_shape[0]), cameraMatrix=None, distCoeffs=None)
+                            imageSize=(img_shape[1], img_shape[0]),
+                            cameraMatrix=None, distCoeffs=None)
 
 # Save pickle file
 camera = {}
 camera["mtx"] = mtx
 camera["dist"] = dist
-# camera["imagesize"] = img_size
+
 pickle.dump(camera, open(const.pickle_save_path, "wb"))
 print('\nPickle file created...')
