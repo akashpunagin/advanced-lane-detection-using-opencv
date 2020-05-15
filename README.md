@@ -34,6 +34,11 @@
 *Birdseye*
 <br /><br />
 
+![Histogram Plot](README_media/Histogram_Plot_screenshot.png "Histogram Plot")
+<br />
+*Histogram Plot on Frame*
+<br /><br />
+
 ![Sliding Windows](README_media/Sliding_Windows_screenshot.png "Sliding Windows")
 <br />
 *Sliding Windows*
