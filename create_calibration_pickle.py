@@ -41,36 +41,38 @@ for i, image in enumerate(images):
     else:
         print(f'For image {i+1} : Not Found. File - {image}')
 
-# Visualize Corners in image
-print('\nDisplaying images with corners...\n')
-for n_img in range(6,12):
-    # image = r'assets/images/calibration_images/calibration' + str(n_img) + r'.jpg'
-    image = mpimg.imread(images[n_img])
+# # Visualize Corners in image
+# print('\nDisplaying images with corners...\n')
+def show_corners():
+    for n_img in range(6,12):
+        # image = r'assets/images/calibration_images/calibration' + str(n_img) + r'.jpg'
+        image = mpimg.imread(images[n_img])
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20,10))
+        fig, (ax1, ax2) = plt.subplots(1, 2)
 
-    ax1.imshow(image);
-    ax1.set_title('Captured Image', fontsize=8)
+        ax1.imshow(image);
+        ax1.set_title('Captured Image', fontsize=8)
 
-    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    success, corner_coordinates = cv2.findChessboardCorners(image=gray, patternSize=(9,6), corners=None)
-    if success == False:
-        print(f'Corners not found for image - {n_img}')
-        continue
-    corners_drawn_img = cv2.drawChessboardCorners(image=image,patternSize=(9,6),corners=corner_coordinates,patternWasFound=success)
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        success, corner_coordinates = cv2.findChessboardCorners(image=gray, patternSize=(9,6), corners=None)
+        if success == False:
+            print(f'Corners not found for image - {n_img}')
+            continue
+        corners_drawn_img = cv2.drawChessboardCorners(image=image,patternSize=(9,6),corners=corner_coordinates,patternWasFound=success)
 
-    ax2.imshow(corners_drawn_img);
-    ax2.set_title('Corners drawn Image', fontsize=8)
+        ax2.imshow(corners_drawn_img);
+        ax2.set_title('Corners drawn Image', fontsize=8)
 
-    # plt.savefig('saved_figures/chess_corners.png')
+    plt.show()
+show_corners()
 
-# Show chessboards with corners
-# plt.show()
+
+
 
 # Distortion Correction
 
 # Distortion Coefficients - (k1 k2 p1 p2 k3) ie (ret, mtx, dist, rvecs, tvecs)
-# By these values, camera can be calibrated and images can be undistorted
+# By these values, camera can be calibra8ted and images can be undistorted
 # mtx: Camera Matrix, which helps to transform 3D objects points to 2D image points
 # dist: distortion coefficient
 # rvecs - rotation vectors
@@ -78,13 +80,29 @@ for n_img in range(6,12):
 # rvecs and tvecs - position of camera in real world
 
 img_shape = mpimg.imread(images[0]).shape
-print('Image shape : ', img_shape)
+print('\nImage shape : ', img_shape)
 
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(
                             objectPoints=chess_points,
                             imagePoints=corners,
                             imageSize=(img_shape[1], img_shape[0]),
                             cameraMatrix=None, distCoeffs=None)
+
+# Undistort an image
+distorted_img = mpimg.imread(images[0])
+undistorted_img = cv2.undistort(src=distorted_img, cameraMatrix=mtx, distCoeffs=dist, dst=None, newCameraMatrix=mtx)
+
+
+# Visualize Distorted and undistorted image
+f, (ax1, ax2) = plt.subplots(1, 2);
+ax1.imshow(distorted_img);
+ax1.set_title('Distorted Image', fontsize=8);
+ax2.imshow(undistorted_img);
+ax2.set_title('Undistorted Image', fontsize=8);
+plt.tight_layout()
+# plt.savefig('saved_figures/undistorted_chess.png')
+plt.show()
+
 
 # Save pickle file
 camera = {}
