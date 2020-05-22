@@ -116,7 +116,17 @@ def display_points(frame, points):
     # Iterate through points and put circle
     for x in range(0,4):
         # cv2.circle(image, center_coordinates, radius, color, thickness)
-        cv2.circle(frame, (int(points[x][0]),int(points[x][1])), 15, (0,0,255), cv2.FILLED)
+        cv2.circle(frame, (int(points[x][0]),int(points[x][1])), 10, (0,0,255), cv2.FILLED)
+
+        # cv2.line(frame, pt1=(int(points[x][0]), int(points[x][1])), pt2=(int(points[x][0]), int(points[x][1])), color=(0,0,255), thickness=2)
+
+
+    # Lines to form a quadrangle
+    cv2.line(frame, pt1=(int(points[0][0]), int(points[0][1])), pt2=(int(points[1][0]), int(points[1][1])), color=(0,0,255), thickness=2)
+    cv2.line(frame, pt1=(int(points[0][0]), int(points[0][1])), pt2=(int(points[2][0]), int(points[2][1])), color=(0,0,255), thickness=2)
+    cv2.line(frame, pt1=(int(points[2][0]), int(points[2][1])), pt2=(int(points[3][0]), int(points[3][1])), color=(0,0,255), thickness=2)
+    cv2.line(frame, pt1=(int(points[3][0]), int(points[3][1])), pt2=(int(points[1][0]), int(points[1][1])), color=(0,0,255), thickness=2)
+
     return frame
 
 # Prespective Wrapping (Birdseye view)
