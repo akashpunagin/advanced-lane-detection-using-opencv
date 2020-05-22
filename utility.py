@@ -77,6 +77,35 @@ def preprocess_frame(frame):
 
     return canny, color_filtered, combined
 
+def apply_sobel(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Sobel  x
+    sobel_x = cv2.Sobel(src=gray, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=3)
+
+    # Sobel y
+    sobel_y = cv2.Sobel(src=gray,ddepth=cv2.CV_64F, dx=0, dy=1, ksize=3)
+
+    sobel_x_y = cv2.addWeighted(sobel_x, 0.5, sobel_y, 0.5, 0)
+
+    # Convert back to uint8
+    sobel_x = cv2.convertScaleAbs(sobel_x)
+    sobel_y = cv2.convertScaleAbs(sobel_y)
+    sobel_x_y = cv2.convertScaleAbs(sobel_x_y)
+
+    return sobel_x_y, sobel_x, sobel_y
+
+def apply_laplacian(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (3, 3), 0)
+
+    # Apply Laplacian filter
+    laplacian_frame = cv2.Laplacian(src=blur, ddepth=cv2.CV_16S, ksize=3)
+
+    # Convert back to uint8
+    laplacian_frame = cv2.convertScaleAbs(laplacian_frame)
+
+    return laplacian_frame
 
 # Display src points on frame
 def display_points(frame, points):

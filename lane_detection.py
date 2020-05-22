@@ -29,6 +29,12 @@ while cap.isOpened():
     # Preprocess frame
     frame_canny, frame_color_filtered, frame_preprocessed = utility.preprocess_frame(undist_frame)
 
+    # Apply Sobel filter
+    sobel_x_y, sobel_x, sobel_y = utility.apply_sobel(frame)
+
+    # Apply Laplacian filter
+    laplacian_frame = utility.apply_laplacian(frame)
+
     # Get Source and Destination points in frame
     src, dst = utility.get_src_dst()
 
@@ -78,31 +84,38 @@ while cap.isOpened():
     try:
         # Read the plotted histogram
         histogram_plot = cv2.imread('assets/plots/histogram_plot.jpg')
-        # Combine with frame
+        # Combine with frame_with_lanes
         frame_with_histogram = cv2.addWeighted(frame, 0.7, histogram_plot, 0.4, 0)
     except Exception as e:
         print('Exception in reading histogram plot...')
 
     # Visualizing
-    if const.is_demo:
-        cv2.imshow('Source points', frame_src_points)
-        cv2.imshow('Steering Wheel', rotated_steering_wheel)
-        cv2.imshow('Lanes', frame_with_text)
-
-        if const.is_show_histogram_plot:
-            cv2.imshow('Histogram Plot', frame_with_histogram)
-    else:
-        cv2.imshow('Original Frame', frame)
+    if const.is_only_compare_filters:
+        cv2.imshow('Sobel x', sobel_x)
+        cv2.imshow('Sobel y', sobel_y)
+        cv2.imshow('Sobel x and y combined', sobel_x_y)
+        cv2.imshow('Laplacian Filter', laplacian_frame)
         cv2.imshow('Canny Filter', frame_canny)
-        cv2.imshow('Preprocessed Frame', frame_preprocessed)
-        cv2.imshow('Birdseye', wrapped_frame)
-        cv2.imshow('Sliding Windows', frame_sliding_windows)
-        cv2.imshow('Source points', frame_src_points)
-        cv2.imshow('Steering Wheel', rotated_steering_wheel)
-        cv2.imshow('Lanes', frame_with_text)
+    else:
+        if const.is_demo:
+            cv2.imshow('Source points', frame_src_points)
+            cv2.imshow('Steering Wheel', rotated_steering_wheel)
+            cv2.imshow('Lanes', frame_with_lanes)
 
-        if const.is_show_histogram_plot:
-            cv2.imshow('Histogram Plot', frame_with_histogram)
+            if const.is_show_histogram_plot:
+                cv2.imshow('Histogram Plot', frame_with_histogram)
+        else:
+            cv2.imshow('Original Frame', frame)
+            cv2.imshow('Canny Filter', frame_canny)
+            cv2.imshow('Preprocessed Frame', frame_preprocessed)
+            cv2.imshow('Birdseye', wrapped_frame)
+            cv2.imshow('Sliding Windows', frame_sliding_windows)
+            cv2.imshow('Source points', frame_src_points)
+            cv2.imshow('Steering Wheel', rotated_steering_wheel)
+            cv2.imshow('Lanes', frame_with_text)
+
+            if const.is_show_histogram_plot:
+                cv2.imshow('Histogram Plot', frame_with_histogram)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
