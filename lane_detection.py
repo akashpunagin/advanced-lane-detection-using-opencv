@@ -29,11 +29,12 @@ while cap.isOpened():
     # Preprocess frame
     frame_canny, frame_color_filtered, frame_preprocessed = utility.preprocess_frame(undist_frame)
 
-    # Apply Sobel filter
-    sobel_x_y, sobel_x, sobel_y = utility.apply_sobel(frame)
+    if const.is_only_compare_filters:
+        # Apply Sobel filter
+        sobel_x_y, sobel_x, sobel_y = utility.apply_sobel(frame)
 
-    # Apply Laplacian filter
-    laplacian_frame = utility.apply_laplacian(frame)
+        # Apply Laplacian filter
+        laplacian_frame = utility.apply_laplacian(frame)
 
     # Get Source and Destination points in frame
     src, dst = utility.get_src_dst()
