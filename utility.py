@@ -66,26 +66,31 @@ def filter_colors(frame):
     return combined
 
 def preprocess_frame(frame):
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    canny = cv2.Canny(blur, 50, 100)
+    if const.is_apply_canny:
+        edge_detected = apply_canny(frame)
+    elif const.is_apply_sobel:
+        edge_detected, sobel_x, sobel_y = apply_sobel(frame)
+    elif const.is_apply_laplacian:
+        edge_detected = apply_laplacian(frame)
+    else:
+        print('Select an edge detection filter in define_constants.py file ...')
     kernel = np.ones((5,5))
-    dialate = cv2.dilate(canny,kernel,iterations=1)
+    dialate = cv2.dilate(edge_detected,kernel,iterations=1)
     erode = cv2.erode(dialate,kernel,iterations=1)
     color_filtered = filter_colors(frame)
     combined = cv2.bitwise_or(color_filtered, erode)
+    return edge_detected, color_filtered, combined
 
-    return canny, color_filtered, combined
+def apply_canny(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    canny = cv2.Canny(blur, 50, 100)
+    return canny
 
 def apply_sobel(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Sobel  x
     sobel_x = cv2.Sobel(src=gray, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=3)
-
-    # Sobel y
     sobel_y = cv2.Sobel(src=gray,ddepth=cv2.CV_64F, dx=0, dy=1, ksize=3)
-
     sobel_x_y = cv2.addWeighted(sobel_x, 0.5, sobel_y, 0.5, 0)
 
     # Convert back to uint8
@@ -97,15 +102,10 @@ def apply_sobel(frame):
 
 def apply_laplacian(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (3, 3), 0)
-
-    # Apply Laplacian filter
-    laplacian_frame = cv2.Laplacian(src=blur, ddepth=cv2.CV_16S, ksize=3)
-
-    # Convert back to uint8
-    laplacian_frame = cv2.convertScaleAbs(laplacian_frame)
-
-    return laplacian_frame
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    laplacian = cv2.Laplacian(src=blur, ddepth=cv2.CV_16S, ksize=3) # Apply Laplacian filter
+    laplacian = cv2.convertScaleAbs(laplacian) # Convert back to uint8
+    return laplacian
 
 # Display src points on frame
 def display_points(frame, points):
@@ -117,9 +117,6 @@ def display_points(frame, points):
     for x in range(0,4):
         # cv2.circle(image, center_coordinates, radius, color, thickness)
         cv2.circle(frame, (int(points[x][0]),int(points[x][1])), 10, (0,0,255), cv2.FILLED)
-
-        # cv2.line(frame, pt1=(int(points[x][0]), int(points[x][1])), pt2=(int(points[x][0]), int(points[x][1])), color=(0,0,255), thickness=2)
-
 
     # Lines to form a quadrangle
     cv2.line(frame, pt1=(int(points[0][0]), int(points[0][1])), pt2=(int(points[1][0]), int(points[1][1])), color=(0,0,255), thickness=2)

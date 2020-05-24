@@ -1,19 +1,28 @@
 import cv2
 
 # VISUALIZING
-is_demo = True
+is_demo = False
 is_show_histogram_plot = False
 is_only_compare_filters = False
 
-# CAMERA AND VIDEO SETUP
-is_camera_feed = False
+# EDGE DETECTION FILTERS (SELECT ONE OUT OF THREE)
+is_apply_canny = False
+is_apply_sobel = False
+is_apply_laplacian = True
 
+if is_apply_canny: edge_detector = "Canny"
+elif is_apply_sobel: edge_detector = "Sobel"
+elif is_apply_laplacian : edge_detector = "Laplacian"
+
+# VIDEO SETUP
 video_path = r'assets/video/test_video.mp4'
 # video_path = r'assets/video/test_video_challenge.mp4'
 # video_path = r'assets/video/test_video_solidWhiteRight.mp4'
 # video_path = r'assets/video/test_video_solidYellowLeft.mp4'
 # video_path = r'assets/video/test_video_harder_challenge.mp4'
 
+# CAMERA SETUP
+is_camera_feed = False
 camera_num = 0
 frame_width = 640
 frame_height = 480
@@ -24,6 +33,7 @@ else:
     initial_trackbar_val = [42,63,14,88] #width-top,height-top,width-bottom,height-bottom
     # initial_trackbar_val = [30, 70,14,88] # ONLY FOR HARDER CHALLENGE TEST VIDEO
 
+# SELECT PATH FOR PICKLE FILE
 # pickle_dir = r'assets/pickle_file/created_pickle_cal.p'
 pickle_dir = r'assets/pickle_file/saved_pickle_cal.p'
 
