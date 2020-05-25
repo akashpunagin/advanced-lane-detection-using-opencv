@@ -379,9 +379,9 @@ def rotate_steering_wheel(image, offset):
 
 def display_text(frame, radius_of_curv, offset):
     if offset > 0.4:
-        direction = 'Go Right'
-    elif offset < -0.4:
         direction = 'Go Left'
+    elif offset < -0.4:
+        direction = 'Go Right'
     elif offset < 0.4 and offset > -0.4:
         direction = 'Go Straight'
     else:

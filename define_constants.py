@@ -1,14 +1,14 @@
 import cv2
 
 # VISUALIZING
-is_demo = False
+is_demo = True
 is_show_histogram_plot = False
 is_only_compare_filters = False
 
 # EDGE DETECTION FILTERS (SELECT ONE OUT OF THREE)
-is_apply_canny = False
+is_apply_canny = True
 is_apply_sobel = False
-is_apply_laplacian = True
+is_apply_laplacian = False
 
 if is_apply_canny: edge_detector = "Canny"
 elif is_apply_sobel: edge_detector = "Sobel"
