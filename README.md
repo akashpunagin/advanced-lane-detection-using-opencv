@@ -59,6 +59,8 @@
 *Lanes with steering wheel*
 <br /><br />
 
-![Output when is_demo=True](README_media/Screencast.gif "Output when is_demo=True")
+#### Click on GIF to open video in YouTube
+[![Output when is_demo=True](README_media/Screencast.gif "Output when is_demo=True")](https://www.youtube.com/watch?v=E8GY_svYbQA)
 <br />
 *Output when is_demo=True*
+
